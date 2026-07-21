@@ -1,0 +1,54 @@
+{
+  "name": "Alfred - Chat Agent (Module 1)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alfred-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-in",
+      "name": "Chat Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "alfred-chat"
+    },
+    {
+      "parameters": {
+        "command": "=python3 {{$env.ALFRED_HOME}}/tools/run_tool.py llm_router --prompt {{JSON.stringify($json.body.prompt)}} --json"
+      },
+      "id": "run-router",
+      "name": "Supervisor -> llm_router",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [520, 300],
+      "notes": "Deterministic Python does the work. The agent only decides which tool + args. Command uses run_tool.py allowlist so no free-form shell can be injected."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.parse($json.stdout) }}",
+        "options": {}
+      },
+      "id": "respond",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [800, 300]
+    }
+  ],
+  "connections": {
+    "Chat Webhook": {
+      "main": [[{ "node": "Supervisor -> llm_router", "type": "main", "index": 0 }]]
+    },
+    "Supervisor -> llm_router": {
+      "main": [[{ "node": "Respond", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "description": "Module 1 chat flow. Auto-imported by setup at startup (no manual n8n wiring). Set ALFRED_HOME env in n8n to the alfred/ directory. API keys live in n8n's encrypted credential store or the tool's .env, never embedded in this JSON."
+  }
+}

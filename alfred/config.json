@@ -1,0 +1,24 @@
+{
+  "_comment": "Alfred non-secret config. JSON (not YAML) so tools stay stdlib-only, zero pip deps. Secrets live in .env, never here.",
+  "provider_order": ["groq", "gemini", "openrouter"],
+  "request": {
+    "timeout_seconds": 30,
+    "max_tokens": 1024,
+    "temperature": 0.6
+  },
+  "voice": {
+    "wake_word": "alfred",
+    "wake_engine": "openwakeword",
+    "tts_engine": "piper",
+    "stt_engine": "groq-whisper"
+  },
+  "ui": {
+    "lite_mode": "auto",
+    "capped_dpr": 1.5,
+    "frameloop": "demand"
+  },
+  "youtube": {
+    "default_privacy": "unlisted",
+    "daily_upload_budget": 6
+  }
+}

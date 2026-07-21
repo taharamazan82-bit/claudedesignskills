@@ -1,0 +1,4 @@
+# Backend-only deps. The tools/ layer stays stdlib-only on purpose.
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6

@@ -1,0 +1,35 @@
+# Secrets — NEVER commit these (per plan secret-management section)
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+tokens/
+youtube_token.json
+client_secret*.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node / frontend
+node_modules/
+dist/
+.vite/
+
+# n8n local data (may contain encrypted credentials)
+n8n/data/
+.n8n/
+
+# Downloaded runtime assets (Piper voices, ffmpeg binaries)
+tools/bin/
+models/
+*.onnx
+
+# Logs / working files
+*.log
+audit.log
+scratch/
