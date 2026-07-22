@@ -46,6 +46,39 @@ import time
 import urllib.error
 import urllib.request
 
+
+def load_dotenv():
+    """
+    Load KEY=VALUE pairs from the nearest .env so the tool works standalone from
+    the CLI (not only via the backend). Searches this script's folder and its
+    parents (alfred/ root); existing environment variables are never overwritten.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    seen = set()
+    for _ in range(4):
+        path = os.path.join(here, ".env")
+        if path not in seen and os.path.isfile(path):
+            seen.add(path)
+            try:
+                for line in open(path, encoding="utf-8"):
+                    line = line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    k, v = line.split("=", 1)
+                    k, v = k.strip(), v.strip().strip('"').strip("'")
+                    if k and k not in os.environ:
+                        os.environ[k] = v
+            except OSError:
+                pass
+            break
+        parent = os.path.dirname(here)
+        if parent == here:
+            break
+        here = parent
+
+
+load_dotenv()
+
 # Provider registry. Every entry is an OpenAI-compatible /chat/completions API,
 # so a single request path serves all of them. base_url has no trailing slash.
 PROVIDERS = {
