@@ -17,8 +17,12 @@ export const useAlfred = create((set, get) => ({
 
 // Lite mode = weak hardware / reduced motion. Same machine that can't run big
 // LLMs also renders this UI, so default to lite when signals point that way.
+// Override with ?mode=3d or ?mode=lite in the URL.
 function detectLiteMode() {
   if (typeof window === "undefined") return false;
+  const forced = new URLSearchParams(window.location.search).get("mode");
+  if (forced === "3d") return false;
+  if (forced === "lite") return true;
   const reduced = window.matchMedia?.(
     "(prefers-reduced-motion: reduce)"
   )?.matches;
