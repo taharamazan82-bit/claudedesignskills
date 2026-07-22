@@ -160,6 +160,10 @@ def call_provider(name, messages, timeout=30, max_tokens=1024, temperature=0.6):
     req = urllib.request.Request(url, data=payload, method="POST")
     req.add_header("Authorization", "Bearer " + key)
     req.add_header("Content-Type", "application/json")
+    req.add_header("Accept", "application/json")
+    # A real User-Agent is required: the default "Python-urllib/x.y" is flagged
+    # as a bot by Cloudflare (in front of api.groq.com) and rejected with 403.
+    req.add_header("User-Agent", "Alfred/0.1 (+https://github.com/alfred-assistant)")
 
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
