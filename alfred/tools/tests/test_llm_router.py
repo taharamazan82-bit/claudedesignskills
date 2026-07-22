@@ -23,11 +23,13 @@ class RoutingLogicTest(unittest.TestCase):
         os.environ.pop("ALFRED_PROVIDER_ORDER", None)
 
     def test_classify(self):
+        # Only 200 succeeds; every non-200 falls through to the next provider
+        # (a 400 from one provider's model must not abort the whole chain).
         self.assertEqual(llm_router._classify(200), "ok")
         self.assertEqual(llm_router._classify(429), "next")
         self.assertEqual(llm_router._classify(503), "next")
         self.assertEqual(llm_router._classify(401), "next")
-        self.assertEqual(llm_router._classify(400), "stop")
+        self.assertEqual(llm_router._classify(400), "next")
 
     def test_falls_back_to_second_provider(self):
         os.environ["GROQ_API_KEY"] = "x"
