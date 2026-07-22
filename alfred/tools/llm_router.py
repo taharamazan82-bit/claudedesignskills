@@ -125,14 +125,15 @@ def model_for(name):
 
 
 def _classify(status):
-    """Map an HTTP status to a routing action: 'next', 'stop', or 'ok'."""
+    """Map an HTTP status to a routing action: 'next' or 'ok'.
+
+    Any non-200 skips to the next provider. A 400 from one provider (e.g. a
+    model name it doesn't recognize) must not kill the whole chain, since the
+    next provider uses a different model and may well succeed.
+    """
     if status == 200:
         return "ok"
-    if status == 429 or 500 <= status < 600:
-        return "next"  # transient — try the next provider
-    if status in (401, 403, 404):
-        return "next"  # this provider is misconfigured — skip it
-    return "stop"  # other 4xx: malformed request, won't self-heal
+    return "next"
 
 
 def call_provider(name, messages, timeout=30, max_tokens=1024, temperature=0.6):
@@ -167,7 +168,16 @@ def call_provider(name, messages, timeout=30, max_tokens=1024, temperature=0.6):
         return {"action": "ok", "text": text, "model": model_for(name)}
     except urllib.error.HTTPError as e:
         action = _classify(e.code)
-        return {"action": action, "reason": "HTTP %d" % e.code}
+        body = ""
+        try:
+            body = e.read().decode("utf-8", "ignore")
+        except Exception:
+            pass
+        # surface the provider's actual error text (trimmed) so failures are debuggable
+        reason = "HTTP %d" % e.code
+        if body:
+            reason += " " + " ".join(body.split())[:220]
+        return {"action": action, "reason": reason}
     except urllib.error.URLError as e:
         return {"action": "next", "reason": "network: %s" % e.reason}
     except (KeyError, IndexError, ValueError) as e:
