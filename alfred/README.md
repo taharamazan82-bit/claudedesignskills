@@ -6,18 +6,20 @@ bir `.py` aracı (AI olmadan da çalışır), AI yalnızca hangi aracı çağır
 
 > Tam mimari ve yol haritası: `../` plan dosyası. Bu README kurulum + durum içindir.
 
-## Zero-touch kurulum (Windows hedef)
+## Zero-touch kurulum (Windows)
 Elle wiring yok. Tek gereken **bir kez** ücretsiz Groq anahtarını `.env`'e yapıştırmak.
 
-```bash
-python3 setup.py                       # .env oluşturur, araçları hazırlar, önkoşulları kontrol eder
-# .env içine GROQ_API_KEY=... yapıştır (tek manuel adım)
-python3 tools/llm_router.py "Merhaba Alfred"     # beyin, AI olmadan CLI'dan çalışır
-```
+**En kolay yol — çift tıkla:** `Alfred.bat`
+İlk çalıştırmada sanal ortamı kurar, backend bağımlılıklarını yükler, backend + 3D arayüzü
+başlatır ve tarayıcıda `http://127.0.0.1:5173` açılır. Sonraki çalıştırmalar anında.
 
-Backend (arayüz köprüsü):
+Öncesinde tek sefer: `.env` içine `GROQ_API_KEY=...` yapıştır (anahtar `console.groq.com`'dan ücretsiz).
+
+**Elle / diğer OS:**
 ```bash
-cd backend && pip install -r requirements.txt && uvicorn app:app --port 8000
+python3 setup.py                              # .env + önkoşul kontrolü
+python3 tools/llm_router.py "Merhaba Alfred"  # beyin, AI olmadan CLI'dan çalışır
+python3 start.py                              # backend + frontend birlikte
 ```
 
 ## Şu anki durum (modüler — teker teker)
