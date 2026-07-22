@@ -159,11 +159,17 @@ body {
 /* ============ LITE ORB (CSS rings) ============ */
 .lite-rig { position: relative; width: 240px; height: 240px; display: grid; place-items: center; }
 .lite-core {
-  width: 130px; height: 130px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, var(--yellow-bright), var(--purple) 55%, var(--purple-deep));
-  box-shadow: 0 0 70px rgba(168,85,247,0.7), 0 0 30px rgba(250,204,21,0.5);
-  animation: pulse 3s ease-in-out infinite;
+  width: 140px; height: 140px; border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(250,204,21,0.9) 0.8px, transparent 1.4px) 0 0 / 9px 9px,
+    radial-gradient(circle, rgba(192,132,252,0.85) 0.8px, transparent 1.4px) 4px 4px / 11px 11px,
+    radial-gradient(circle at 40% 35%, rgba(168,85,247,0.55), rgba(109,40,217,0.15) 60%, transparent 72%);
+  -webkit-mask: radial-gradient(circle, #000 62%, transparent 72%);
+  mask: radial-gradient(circle, #000 62%, transparent 72%);
+  box-shadow: 0 0 70px rgba(168,85,247,0.7), 0 0 34px rgba(250,204,21,0.5);
+  animation: pulse 3s ease-in-out infinite, coreSpin 20s linear infinite;
 }
+@keyframes coreSpin { to { background-position: 0 0, 140px 140px, 0 0; } }
 .lite-ring { position: absolute; border-radius: 50%; }
 .lite-ring-a { width: 200px; height: 200px; border: 2px dashed var(--yellow); opacity: 0.7; animation: spin 8s linear infinite; }
 .lite-ring-b { width: 240px; height: 240px; border: 1px solid var(--purple-bright); opacity: 0.5; animation: spin 12s linear infinite reverse; }
