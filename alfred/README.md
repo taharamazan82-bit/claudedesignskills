@@ -24,7 +24,8 @@ cd backend && pip install -r requirements.txt && uvicorn app:app --port 8000
 - [x] **Modül 0 — Temel & zero-touch iskelet**: yapı, config, docs, `.gitignore`, `.env.example`, `setup.py`.
 - [x] **Modül 1 — Beyin & router**: `tools/llm_router.py` (Groq→Gemini→OpenRouter fallback), `tools/run_tool.py`
       (güvenlik allowlist), `backend/app.py` (FastAPI + WebSocket), `n8n/chat-flow.json`. Testler: `tools/tests/`.
-- [ ] Modül 2 — Three.js etkileşimli arayüz (avatar + araç dock'u, lite mod)
+- [x] **Modül 2 — Three.js etkileşimli arayüz**: `frontend/` (Vite+React+R3F), animasyonlu Alfred avatarı
+      (durum makinesi: idle/dinliyor/düşünüyor/konuşuyor/hata), sohbet paneli, araç dock'u, **lite mod** (zayıf donanım). `npm run build` ✓.
 - [ ] Modül 3 — Ses (Groq Whisper STT + Piper TTS) + "Alfred" wake-word
 - [ ] Modül 4 — Web araştırma
 - [ ] Modül 5 — Video düzenleme + YouTube yükleme + takip
